@@ -1,30 +1,32 @@
 package Angel.app;
 
-import Angel.app.Interfaces.Driveable;
-import Angel.app.Interfaces.Flyable;
-import Angel.app.Interfaces.FlyingVehicle;
-import Angel.app.services.Airplane;
-import Angel.app.services.Car;
-import Angel.app.services.FlyingCar;
+import Angel.app.Interfaces.EmployeeRepository;
+import Angel.app.models.Gender;
+import Angel.app.models.Position;
+import Angel.app.repository.CloudEmployeeRepository;
+import Angel.app.services.Employee;
+import Angel.app.services.EmployeeManager;
+import Angel.app.repository.InMemoryEmployeeRepository;
 
 public class Main {
-    public static void main(String[] args) {
-        Car car = new Car();
-        Airplane airplane = new Airplane();
-        FlyingCar flyingCar = new FlyingCar();
+    public static void main(String[] args) {  // Primer repositorio en memoria
+        EmployeeRepository repository = new InMemoryEmployeeRepository();
+        EmployeeManager manager = new EmployeeManager(repository);
 
-        testVehicle(car);        // solo drive()
-        testVehicle(airplane);   // solo fly()
-        testVehicle(flyingCar);  // ambos: drive() y fly()
+        manager.addEmployee(new Employee("Alice", Gender.FEMALE, Position.MANAGER));
+        manager.addEmployee(new Employee("Bob", Gender.MALE, Position.EXECUTIVE));
 
-    }
+        System.out.println("=== Empleados en memoria ===");
+        manager.printEmployees();
 
-    static void testVehicle(Object obj) {
-        if (obj instanceof Driveable) {
-            ((Driveable) obj).drive();
-        }
-        if (obj instanceof Flyable) {
-            ((Flyable) obj).fly();
-        }
+        // Segundo repositorio en la nube
+        EmployeeRepository repository2 = new CloudEmployeeRepository();
+        EmployeeManager manager2 = new EmployeeManager(repository2);
+
+        manager2.addEmployee(new Employee("Carla", Gender.FEMALE, Position.ADMINISTRATOR));
+        manager2.addEmployee(new Employee("David", Gender.MALE, Position.EXECUTIVE));
+
+        System.out.println("=== Empleados en la nube ===");
+        manager2.printEmployees();
     }
 }
