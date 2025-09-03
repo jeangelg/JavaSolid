@@ -1,25 +1,30 @@
 package Angel.app;
 
-import Angel.app.Interfaces.Shape;
-import Angel.app.models.Rectangle;
-import Angel.app.models.Square;
+import Angel.app.Interfaces.Driveable;
+import Angel.app.Interfaces.Flyable;
+import Angel.app.Interfaces.FlyingVehicle;
+import Angel.app.services.Airplane;
+import Angel.app.services.Car;
+import Angel.app.services.FlyingCar;
 
 public class Main {
     public static void main(String[] args) {
-        Rectangle rect = new Rectangle(5, 10);
+        Car car = new Car();
+        Airplane airplane = new Airplane();
+        FlyingCar flyingCar = new FlyingCar();
 
-        Square square = new Square(5);
-        getArea(rect);
-        getArea(square);
-
+        testVehicle(car);        // solo drive()
+        testVehicle(airplane);   // solo fly()
+        testVehicle(flyingCar);  // ambos: drive() y fly()
 
     }
 
-    static void getArea(Shape s) {
-        System.out.println(
-                "The area of the " + s.getClass().getName() +
-                        " is: " + s.getArea()
-        );
+    static void testVehicle(Object obj) {
+        if (obj instanceof Driveable) {
+            ((Driveable) obj).drive();
+        }
+        if (obj instanceof Flyable) {
+            ((Flyable) obj).fly();
+        }
     }
-
 }
